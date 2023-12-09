@@ -13,50 +13,86 @@
             src="https://code.jquery.com/jquery-3.7.1.js"
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
             crossorigin="anonymous"></script>
-    <script>
-        $(document).ready(function () {
-            $("#search-list").on("click", function () {
-                // const targetDate = $("#target-date").val();
-                $.ajax({
-                    url: "/main/hotPlaceJson",
-                    type: "POST",
-                    // data : {targetDt : targetDate},
-                    success: function (data) {
-                        const body = $("#body");
-                        body.empty();
-                        let tag="";
 
-                        if(data.length > 0){
-                            for(let i = 0; i < data.length; i++){
-                                tag +=  `
-                                        <div class="border-bottom mt-3">
-                                            <p ><b>${data[i].main_TITLE}</b></p>
-                                            <div class="mt-4">
-                                                <p >${data[i].addr1}</p>
-                                                <p>${data[i].rprsntv_MENU}</p>
-                                            </div>
-                                        </div>`
-                            }
-                        }
-                        body.append(tag);
-                    },
-                    error: function () {
-                        alert("통신 중 오류가 발생했습니다.");
+    <script>
+        $.ajax({
+            url: "/main/hotPlaceJson",
+            type: "POST",
+
+            success: function (data) {
+                const body = $("#body");
+                body.empty();
+                let tag = "";
+
+                if (data.length > 0) {
+                    for (let i = 0; i < data.length; i++) {
+                        tag += `<div class="border-bottom mt-3">
+                                    <p ><b>${data[i].main_TITLE}</b></p>
+                                    <div class="mt-3">
+                                        <p>주소 : ${data[i].addr1}
+                                        <br>메뉴 : ${data[i].rprsntv_MENU}</p>
+                                    </div>
+                                </div>`;
                     }
-                });
-            });
+                }
+                body.append(tag);
+                myMap(data);
+            },
+            error: function () {
+                alert("통신 중 오류가 발생했습니다.");
+            }
         });
+
+        let map;
+
+        function myMap(data) {
+            var mapOptions = {
+                center: new google.maps.LatLng(35.19184, 129.01126),
+                zoom: 11
+            };
+
+            map = new google.maps.Map(
+                document.getElementById("googleMap"),
+                mapOptions);
+
+            addMarkers(data);
+        }
+
+        function addMarkers(data) {
+            for (let i = 0; i < data.length; i++) {
+                const latitude = parseFloat(data[i].lat);
+                const longitude = parseFloat(data[i].lng);
+                const title = data[i].main_TITLE;
+
+                addMarker(latitude, longitude, title);
+            }
+        }
+
+        function addMarker(latitude, longitude, title) {
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(latitude, longitude),
+                map: map,
+                title: title
+            });
+        }
     </script>
 </head>
 <body>
 <div class="row">
-    <div class="col-sm-8"><h1>지도</h1></div>
-    <div class="col-sm-4">
-        <div id="body">
-
-        </div>
-        <button class="btn btn-primary" id="search-list">찾기</button>
+    <div class="col-sm-8" id="googleMap" style="position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;">
     </div>
+
+    <div class="col-sm-4" style="overflow-y: scroll;
+            max-height: 100vh;">
+        <div id="body">
+        </div>
+    </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZrlhq8iR95fBGKRAN-d0oly8k3qQW6xI&callback=myMap"></script>
 </div>
 </body>
 </html>
