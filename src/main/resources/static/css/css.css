@@ -1,0 +1,111 @@
+#body a {
+    color: black;
+}
+
+#body a:hover{
+    color: blue;
+}
+#details {
+    display: block;
+    text-align: left;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.row {
+    margin: 0;
+    height: 100vh;
+    overflow: auto;
+}
+
+#googleMap {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 75%; /* 가로의 3/4 */
+    height: 100%;
+    margin: 0;
+}
+
+.tab-container {
+    overflow-y: scroll;
+    max-height: 100vh;
+    width: 25%; /* 가로의 1/4 */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0; /* Tab Container의 마진을 없앱니다. */
+    padding: 0; /* Tab Container의 패딩을 없앱니다. */
+}
+
+.tabs {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%; /* 수정된 부분: 전체 가로 너비를 차지하도록 설정 */
+    margin-bottom: 0;
+    gap: 0; /* 탭1과 탭2 버튼 사이의 간격을 없앱니다. */
+}
+
+.tab {
+    flex: 1; /* 수정된 부분: 같은 행에 있는 다른 요소와 동일한 너비로 차지하도록 설정 */
+    padding: 8px 16px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: #f2f2f2;
+    margin: 0; /* Tab Container의 마진을 없앱니다. */
+}
+.tab:hover {
+    background-color: #e0e0e0;
+}
+
+.tab-content {
+    display: none;
+    padding: 16px;
+    border: 1px solid #ccc;
+    border-radius: 0 0 5px 5px;
+    background-color: #f9f9f9;
+    /*height: calc(100% - 40px); !* 수정된 부분: 전체 높이에서 간격만큼 빼도록 조정 *!*/
+    /*overflow-y: auto; !* 수정된 부분: 내용이 넘칠 경우 스크롤바 표시 *!*/
+    width: 100%;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.toggleButton {
+    cursor: pointer;
+    font-size: 24px;
+}
+
+/* 토글 버튼 스타일 */
+.toggleButton {
+    font-size: 20px; /* 아이콘 크기 조절 */
+    cursor: pointer;
+    user-select: none;
+}
+
+.heart::before,
+.noHeart::before {
+    font-size: 20px; /* 하트 크기 조절 */
+}
+
+.heart::before {
+    content: '♥';
+    color: red;
+}
+
+.noHeart::before {
+    content: '♥';
+    color: gray;
+}

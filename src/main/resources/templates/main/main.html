@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,90 +10,41 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
-    <script
-            src="https://code.jquery.com/jquery-3.7.1.js"
-            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-            crossorigin="anonymous"></script>
-
-    <script>
-        $.ajax({
-            url: "/main/hotPlaceJson",
-            type: "POST",
-
-            success: function (data) {
-                const body = $("#body");
-                body.empty();
-                let tag = "";
-
-                if (data.length > 0) {
-                    for (let i = 0; i < data.length; i++) {
-                        tag += `<div class="border-bottom mt-3">
-                                    <p ><b>${data[i].main_TITLE}</b></p>
-                                    <div class="mt-3">
-                                        <p>주소 : ${data[i].addr1}
-                                        <br>메뉴 : ${data[i].rprsntv_MENU}</p>
-                                    </div>
-                                </div>`;
-                    }
-                }
-                body.append(tag);
-                myMap(data);
-            },
-            error: function () {
-                alert("통신 중 오류가 발생했습니다.");
-            }
-        });
-
-        let map;
-
-        function myMap(data) {
-            var mapOptions = {
-                center: new google.maps.LatLng(35.19184, 129.01126),
-                zoom: 11
-            };
-
-            map = new google.maps.Map(
-                document.getElementById("googleMap"),
-                mapOptions);
-
-            addMarkers(data);
-        }
-
-        function addMarkers(data) {
-            for (let i = 0; i < data.length; i++) {
-                const latitude = parseFloat(data[i].lat);
-                const longitude = parseFloat(data[i].lng);
-                const title = data[i].main_TITLE;
-
-                addMarker(latitude, longitude, title);
-            }
-        }
-
-        function addMarker(latitude, longitude, title) {
-            var marker = new google.maps.Marker({
-                position: new google.maps.LatLng(latitude, longitude),
-                map: map,
-                title: title
-            });
-        }
-    </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <link th:href="@{/css/css.css}" rel="stylesheet" />
+    <script type="text/javascript" th:src="@{/js/mainjs.js}"></script>
 </head>
-<body>
-<div class="row">
-    <div class="col-sm-8" id="googleMap" style="position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;">
-    </div>
 
-    <div class="col-sm-4" style="overflow-y: scroll;
-            max-height: 100vh;">
-        <div id="body">
+<body>
+<div th:replace="~{/layout/header :: headerNavbar}"></div>
+<div class="row" style="flex: 1; display: flex; overflow: hidden;">
+    <div id="googleMap" style="flex: 3;"></div>
+    <div class="tab-container" style="flex: 1; overflow-y: auto;">
+        <ul class="tabs">
+            <li class="tab text-center" onclick="changeTab(1)">목록</li>
+            <li class="tab text-center" onclick="changeTab(2)">즐겨찾기</li>
+        </ul>
+        <div class="tab-content" id="tab1">탭 1의 내용입니다.</div>
+        <div class="tab-content" id="tab2">탭 2의 내용입니다.</div>
+    </div>
+    <div class="modal fade" id="markerModal" tabindex="-1" role="dialog" aria-labelledby="markerModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="markerModalLabel">장소</h5>
+                    <button type="button" class="btn btn-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body" id="markerModalBody">
+                </div>
+            </div>
         </div>
     </div>
-
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZrlhq8iR95fBGKRAN-d0oly8k3qQW6xI&callback=myMap"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZrlhq8iR95fBGKRAN-d0oly8k3qQW6xI&callback=myMap">
+    </script>
 </div>
 </body>
 </html>
