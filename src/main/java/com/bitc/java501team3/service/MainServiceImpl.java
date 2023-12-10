@@ -1,8 +1,11 @@
 package com.bitc.java501team3.service;
 
+import com.bitc.java501team3.dto.FavListDTO;
 import com.bitc.java501team3.dto.hotPlaceDTO.ItemDTO;
 import com.bitc.java501team3.dto.hotPlaceDTO.RootDTO;
+import com.bitc.java501team3.mapper.MainMapper;
 import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -13,6 +16,8 @@ import java.util.List;
 
 @Service
 public class MainServiceImpl implements MainService {
+    @Autowired
+    private MainMapper mainMapper;
     @Override
     public List<ItemDTO> gethotPlaceJson(String serviceUrl)throws Exception {
         List<ItemDTO> itemList = null;
@@ -52,5 +57,20 @@ public class MainServiceImpl implements MainService {
             }
         }
         return itemList;
+    }
+
+    @Override
+    public void insertFav(int favListStoreIdx) throws Exception {
+        mainMapper.insertFav(favListStoreIdx);
+    }
+
+    @Override
+    public void deltetFav(int favListStoreIdx) {
+        mainMapper.deleteFav(favListStoreIdx);
+    }
+
+    @Override
+    public List<FavListDTO> selectFavList() {
+        return mainMapper.selectFavList();
     }
 }

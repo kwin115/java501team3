@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bitc.java501team3.mapper.MainMapper">
+    <insert id="insertFav" parameterType="int">
+        insert into fav_list (fav_list_user_id, fav_list_store_idx)
+        values('test1',#{favListStoreIdx});
+    </insert>
+
+    <update id="deleteFav" parameterType="int">
+        DELETE FROM fav_list
+        WHERE fav_list_user_id = 'test1'
+        and fav_list_store_idx = #{favListStoreIdx};
+    </update>
+
+    <select id="selectFavList" resultType="com.bitc.java501team3.dto.FavListDTO">
+        SELECT
+            fav_list_store_idx
+        FROM
+            fav_list
+        WHERE
+            fav_list_user_id = 'test1'
+    </select>
+</mapper>

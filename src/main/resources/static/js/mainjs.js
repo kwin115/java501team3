@@ -11,11 +11,12 @@ $.ajax({
 
         if (data.length > 0) {
             for (let i = 0; i < data.length; i++) {
+                let favListStoreIdx=i;
                 tag += `<div class="border-bottom mt-2">
                                     <a class="text-decoration-none text-dark" href="#" onclick="createMarker(${data[i].lat}, ${data[i].lng}, '${data[i].main_TITLE}','${i}')">
                                         <b>${data[i].main_TITLE}</b>
                                     </a>
-                                    <span class="toggleButton noHeart" id="toggleButton${i}" onclick="toggleHeart(${i})"></span>
+                                    <span class="toggleButton noHeart" id="toggleButton${i}" onclick="toggleHeart(${favListStoreIdx})"></span>
                                     <div class="mt-2">
                                         <p>주소 : ${data[i].addr1}
                                         <br>메뉴 : ${data[i].rprsntv_MENU}<br></p>
@@ -27,6 +28,7 @@ $.ajax({
         }
         body.append(tag);
         myMap(data);
+        addFavList(data);
     },
     error: function () {
         alert("통신 중 오류가 발생했습니다.");
@@ -94,28 +96,95 @@ function clearMarkers() {
 
     markers = [];
 }
-function toggleHeart(buttonIndex) {
-    var button = document.getElementById(`toggleButton${buttonIndex}`);
+function toggleHeart(favListStoreIdx) {
+    var button = document.getElementById(`toggleButton${favListStoreIdx}`);
 
-    // 토글 버튼의 클래스를 변경하여 스타일이 적용되도록 함
-    button.classList.toggle('heart');
-    button.classList.toggle('noHeart');
+    // 'heart' 클래스가 있을 때
+    if (button.classList.contains('heart')) {
+        // 'heart' 클래스를 제거
+        button.classList.remove('heart');
+        button.classList.add('noHeart');
 
-    // 여기서 버튼이 클릭되었을 때의 추가 작업을 수행합니다.
-    console.log(`버튼 ${buttonIndex}이(가) 클릭되었습니다.`);
+        // AJAX를 이용해 찜 목록 삭제를 수행
+        $.ajax({
+            url: "/mainDeleteFav",
+            type: "GET",
+            data: {favListStoreIdx: favListStoreIdx},
+            success: function (response) {
+                console.log(response);
+            },
+            error: function () {
+                alert("삭제 통신 중 오류가 발생했습니다.");
+            }
+        });
+    }
+    // 'noHeart' 클래스가 있을 때
+    else {
+        // 'noHeart' 클래스를 제거하고 'heart' 클래스를 추가
+        button.classList.remove('noHeart');
+        button.classList.add('heart');
 
-    // 여기에 추가로 원하는 작업을 수행할 수 있습니다.
+        // AJAX를 이용해 찜 목록 추가를 수행
+        $.ajax({
+            url: "/mainAddFav",
+            type: "GET",
+            data: {favListStoreIdx: favListStoreIdx},
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (error) {
+                console.error("Ajax 요청 에러:", error);
+            }
+        });
+    }
 }
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('tab1').classList.add('active');
-});
 
 function changeTab(tabIndex) {
     document.querySelectorAll('.tab-content').forEach(function(content) {
         content.classList.remove('active');
     });
     document.getElementById('tab' + tabIndex).classList.add('active');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('tab1').classList.add('active');
+});
+
+function addFavList(data) {
+    const body = $("#tab2");
+    let tag = "";
+    body.empty();
+
+    // 서버에서 favList를 받아오는 AJAX 요청
+    $.ajax({
+        url: "/mainViewFavList",
+        type: "GET",
+        dataType: "json",
+        success: function (favList) {
+            // favList의 각 요소에 대해 동적으로 HTML 태그 생성
+            favList.forEach(function (item) {
+                // favList가 배열이라면 item을 직접 사용
+                console.log(item.favListStoreIdx);
+                tag += `<div class="border-bottom mt-2">
+                            <a class="text-decoration-none text-dark" href="#" onclick="createMarker(${data[item.favListStoreIdx].lat}, ${data[item.favListStoreIdx].lng}, '${data[item.favListStoreIdx].main_TITLE}','${item.favListStoreIdx}')">
+                                <b>${data[item.favListStoreIdx].main_TITLE}</b>
+                            </a>
+                            <span class="toggleButton noHeart" id="toggleButton${item.favListStoreIdx}" onclick="toggleHeart(${item.favListStoreIdx})"></span>
+                            <div class="mt-2">
+                                <p>주소 : ${data[item.favListStoreIdx].addr1}
+                                <br>메뉴 : ${data[item.favListStoreIdx].rprsntv_MENU}<br></p>
+                                <a class="text-decoration-none text-dark" href="/main/detail?idx=${item.favListStoreIdx}" id="details">상세보기</a>
+                                <br>
+                            </div>
+                        </div>`;
+            });
+
+            // 생성된 HTML을 body에 추가
+            body.append(tag);
+        },
+        error: function () {
+            console.error("통신 중 오류가 발생했습니다.");
+        }
+    });
 }
 
