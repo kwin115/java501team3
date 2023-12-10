@@ -138,18 +138,6 @@ function toggleHeart(favListStoreIdx) {
         });
     }
 }
-
-function changeTab(tabIndex) {
-    document.querySelectorAll('.tab-content').forEach(function(content) {
-        content.classList.remove('active');
-    });
-    document.getElementById('tab' + tabIndex).classList.add('active');
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('tab1').classList.add('active');
-});
-
 function addFavList(data) {
     const body = $("#tab2");
     let tag = "";
@@ -186,5 +174,17 @@ function addFavList(data) {
             console.error("통신 중 오류가 발생했습니다.");
         }
     });
+
+function changeTab(tabIndex) {
+    document.querySelectorAll('.tab-content').forEach(function(content) {
+        content.classList.remove('active');
+    });
+    document.getElementById('tab' + tabIndex).classList.add('active');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('tab1').classList.add('active');
+});
+
 }
 
