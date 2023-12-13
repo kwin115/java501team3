@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.bundle.js"></script>
+    <title>Title</title>
+</head>
+<body>
+
+<div class="container">
+    <div class="top"></div>
+    <div class="bottom"></div>
+    <div class="center">
+        <h2>로그인페이지</h2>
+        <form action="/user/loginProcess" method="post">
+            <input type="text" class="form-control" id="user-id" name="userId" placeholder="아이디를 입력하세요"/>
+            <input type="password" class="form-control mt-3" id="user-pw" name="userPw" placeholder="비밀번호를 입력하세요"/>
+            <div class="find-btn mt-3">
+                <button type="submit" class="btn btn-primary">로그인</button>
+                <button type="reset" class="btn btn-secondary">취소</button>
+            </div>
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <a th:href="@{/user/join}" class="btn btn-link">회원가입</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

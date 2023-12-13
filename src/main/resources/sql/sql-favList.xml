@@ -6,12 +6,12 @@
 <mapper namespace="com.bitc.java501team3.mapper.MainMapper">
     <insert id="insertFav" parameterType="int">
         insert into fav_list (fav_list_user_id, fav_list_store_idx)
-        values('test1',#{favListStoreIdx});
+        values(#{userId},#{favListStoreIdx});
     </insert>
 
     <update id="deleteFav" parameterType="int">
         DELETE FROM fav_list
-        WHERE fav_list_user_id = 'test1'
+        WHERE fav_list_user_id = #{userId}
         and fav_list_store_idx = #{favListStoreIdx};
     </update>
 
@@ -21,6 +21,6 @@
         FROM
             fav_list
         WHERE
-            fav_list_user_id = 'test1'
+            fav_list_user_id = #{userId}
     </select>
 </mapper>

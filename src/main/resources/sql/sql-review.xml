@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bitc.java501team3.mapper.ReviewMapper">
+    <insert id="insertReview" parameterType="com.bitc.java501team3.dto.ReviewDTO">
+        insert into review (review_store_idx, review_content, review_user_id, review_create_date)
+        values (#{reviewStoreIdx}, #{reviewContent}, #{userId}, now())
+    </insert>
+
+    <select id="selectReviewList" parameterType="int" resultType="com.bitc.java501team3.dto.ReviewDTO">
+        SELECT
+            review_content, review_user_id, review_create_date
+        FROM
+            review
+        WHERE
+            review_store_idx = #{reviewStoreIdx}
+        ORDER BY
+            review_create_date DESC;
+    </select>
+</mapper>

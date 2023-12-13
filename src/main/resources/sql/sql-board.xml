@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--mybatis sql 쿼리 mapping 파일임을 나타내는 구문 -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bitc.java501team3.mapper.BoardMapper">
+
+    <select id="selectBoardList" resultType="com.bitc.java501team3.dto.FreeBoardDTO">
+        SELECT
+            board_idx, board_title, board_user_id ,
+            DATE_FORMAT(board_create_date, '%Y.%m.%d') AS board_create_date,
+            board_hitcnt,
+            (
+            SELECT COUNT(*)
+            FROM comment c
+            WHERE c.cm_board_idx = f.board_idx
+            ) AS comment_count
+        FROM
+            freeboard f
+        WHERE
+            board_deleted_yn = 'N'
+        ORDER BY
+            board_idx DESC
+    </select>
+
+    <select id="selectBoardPageList" resultType="com.bitc.java501team3.dto.FreeBoardDTO">
+        SELECT
+            board_idx, board_title, board_user_id ,
+            DATE_FORMAT(board_create_date, '%Y.%m.%d') AS board_create_date,
+            board_hitcnt,
+            (
+            SELECT COUNT(*)
+            FROM comment c
+            WHERE c.cm_board_idx = f.board_idx
+            ) AS comment_count
+        FROM
+            freeboard f
+        WHERE
+            board_deleted_yn = 'N'
+        ORDER BY
+            board_idx DESC
+    </select>
+
+    <select id="selectBoardDetail" parameterType="int" resultType="com.bitc.java501team3.dto.FreeBoardDTO">
+        SELECT
+        board_idx, board_title, board_content, board_user_id, board_create_date, board_hitcnt,
+            (
+            SELECT COUNT(*)
+            FROM comment c
+            WHERE c.cm_board_idx = f.board_idx
+            ) AS comment_count
+        FROM
+            freeboard f
+        WHERE
+            board_deleted_yn = 'N'
+        AND
+            board_idx = #{boardIdx}
+    </select>
+
+<!--    첨부파일정보 가져오기-->
+    <select id="selectBoardFileInfo" parameterType="int" resultType="com.bitc.java501team3.dto.FreeBoardFileDTO">
+        SELECT
+            freeboard_file_idx, freeboard_idx, freeboard_orgfile_name,
+            SUBSTRING_INDEX(freeboard_storedfile_name,'upload',-1) freeboard_storedfile_name,
+            freeboard_filesize, freeboard_userid,
+            freeboard_createdate, freeboard_deleted_yn
+        FROM
+            freeboard_file
+        WHERE
+            freeboard_idx = #{boardIdx}
+        AND
+            freeboard_deleted_yn = 'N'
+    </select>
+
+    <update id="updateHitCount" parameterType="int">
+        UPDATE
+            freeboard
+        SET
+            board_hitcnt = board_hitcnt + 1
+        WHERE
+            board_idx = #{boardIdx}
+    </update>
+
+    <insert id="insertBoard" parameterType="com.bitc.java501team3.dto.FreeBoardDTO" useGeneratedKeys="true" keyProperty="boardIdx">
+        INSERT INTO
+            freeboard(board_title, board_content, board_create_date, board_user_id)
+        VALUES
+            (#{boardTitle}, #{boardContent}, NOW(), #{boardUserId})
+    </insert>
+
+    <insert id="insertBoardFileList" parameterType="com.bitc.java501team3.dto.FreeBoardDTO">
+        INSERT INTO
+            freeboard_file(freeboard_idx, freeboard_orgfile_name, freeboard_storedfile_name, freeboard_filesize, freeboard_userid, freeboard_createdate)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.freeboardIdx}, #{item.freeboardOrgFileName}, #{item.freeboardStoredFileName} , #{item.freeboardFilesize} , #{userId} , NOW())
+        </foreach>
+    </insert>
+
+    <update id="editBoard" parameterType="com.bitc.java501team3.dto.FreeBoardDTO">
+        UPDATE
+            freeboard
+        SET
+            board_title = #{boardTitle}
+            board_content = #{boardContent}
+        WHERE
+            board_idx = #{boardIdx}
+        AND
+            board_deleted_yn = 'N'
+    </update>
+
+
+</mapper>

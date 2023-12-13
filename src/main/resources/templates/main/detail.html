@@ -6,6 +6,9 @@
     <title>Title</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
@@ -13,13 +16,63 @@
             src="https://code.jquery.com/jquery-3.7.1.js"
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
             crossorigin="anonymous"></script>
+    <style>
+        body{
+            background: rgba(0,0,0,0.03);
+        }
+        *{
+            font-family: 'Gowun Dodum', sans-serif;
+        }
+        .hide {
+            display: none;
+        }
+        #reviewFormContainer {
+            margin-top: 5px; /* 원하는 간격으로 조절하세요 */
+        }
+        #showFormBtn {
+            width: 100%;
+        }
+        #submitBtn {
+            width: 100%;
+        }
+    </style>
 </head>
-<div th:replace="~{/layout/header :: headerNavbar}"></div>
 <body>
-<div th:attr="data-idx=${idx}" id="idxValue"></div>
-<div id="body" class="mt-3"></div>
-<div id="googleMap" style="height: 500px; width: 500px;" class="mt-3"></div>
-<script type="text/javascript" th:src="@{/js/detailjs.js}"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZrlhq8iR95fBGKRAN-d0oly8k3qQW6xI&callback=myMap"></script>
+<div th:replace="~{/layout/header :: headerNavbar}"></div>
+
+<div style="flex: 1; display: flex; overflow: hidden;">
+    <div style="flex: 3; width: 75%">
+        <div th:attr="data-idx=${idx}" id="idxValue"></div>
+        <div id="body" class="mt-3"></div>
+        <div class="mb-5">
+            <div id="googleMap" style="height: 500px; width: 100%;" class="mt-3 container" ></div>
+        </div>
+        <script type="text/javascript" th:src="@{/js/detailjs.js}"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZrlhq8iR95fBGKRAN-d0oly8k3qQW6xI&callback=myMap"></script>
+    </div>
+    <div style="flex: 1; overflow-y: auto; width: 25%" class="mt-3">
+        <div class="col-sm">
+            <button class="btn btn-outline-info " id="showFormBtn">리뷰 작성</button>
+        </div>
+        <div>
+            <div class="hide" id="reviewFormContainer">
+                <form action="/review/write" method="get" enctype="multipart/form-data">
+                    <div>
+                        <input type="file" class="form-control" id="file" name="file" multiple>
+                    </div>
+                    <div class="mt-2">
+                        <textarea class="form-control" id="contents" name="reviewContent" rows="5" placeholder="내용을 입력하세요"></textarea>
+                    </div>
+                    <div class="mt-2">
+                        <button type="submit" class="btn btn-info text-light" id="submitBtn">등록</button>
+                    </div>
+                    <input type="text" name="reviewStoreIdx" hidden="hidden" th:value="${idx}">
+                </form>
+            </div>
+            <div id="reviewList">
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

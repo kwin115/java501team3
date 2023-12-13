@@ -37,6 +37,16 @@ dependencies {
 	implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '4.0.4'
 	implementation group: 'jakarta.activation', name: 'jakarta.activation-api', version: '2.1.2'
 	implementation 'com.google.code.gson:gson:2.10.1'
+
+	//파일 업로드용
+	// https://mvnrepository.com/artifact/commons-io/commons-io
+	implementation 'commons-io:commons-io:2.15.1'
+	// https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload
+	implementation 'commons-fileupload:commons-fileupload:1.5'
+
+	// 페이지헬퍼
+	// https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter
+	implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:2.0.0'
 }
 
 tasks.named('test') {

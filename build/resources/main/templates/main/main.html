@@ -12,12 +12,11 @@
             crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js"
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <link th:href="@{/css/css.css}" rel="stylesheet" />
-    <script type="text/javascript" th:src="@{/js/mainjs.js}"></script>
+    <link rel="stylesheet" type="text/css" href="/css/css.css">
+    <script type="text/javascript" src="/js/mainjs.js"></script>
 </head>
 
 <body>
-
 <div th:replace="~{/layout/header :: headerNavbar}"></div>
 <div class="row" style="flex: 1; display: flex; overflow: hidden;">
     <div id="googleMap" style="flex: 3;"></div>
@@ -26,8 +25,8 @@
             <li class="tab text-center" onclick="changeTab(1)">목록</li>
             <li class="tab text-center" onclick="changeTab(2)">즐겨찾기</li>
         </ul>
-        <div class="tab-content" id="tab1">탭 1의 내용입니다.</div>
-        <div th:if="${#lists.size(favList)} > 0" th:each="item : ${favList}" class="tab-content" id="tab2">탭 2의 내용입니다.</div>
+        <div class="tab-content active" id="tab1">탭 1의 내용입니다.</div>
+        <div class="tab-content" id="tab2">탭 2의 내용입니다.</div>
     </div>
     <div class="modal fade" id="markerModal" tabindex="-1" role="dialog" aria-labelledby="markerModalLabel"
          aria-hidden="true">

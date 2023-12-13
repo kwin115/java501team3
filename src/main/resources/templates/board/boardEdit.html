@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+            crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#btn-update").on("click", function () {
+                $("#method").val("PUT");
+                const frm = $("#frm")[0];
+                frm.action = "/java501team3/board/" + $("#board-idx").val();
+                frm.submit();
+            });
+
+            $("#btn-cancel").on("click", function () {
+                history.back();
+            });
+
+        });
+    </script>
+
+</head>
+<body>
+<div th:replace="~{/layout/header :: headerNavbar}"></div>
+
+<main class="container p-2">
+    <section>
+        <div class="row">
+            <div class="col-sm">
+                <form action="/board/inserBoard.do" method="post" enctype="multipart/form-data">
+                    <!-- 파일 정보와 FORM 정보를 동시에 전달하기 위해서 enctype을 변경(multipart/form-data타입)-->
+                    <div class="row mt-3">
+                        <div class="col-sm">
+                            <label for="title" class="form-label">제목 : </label>
+                            <input type="text" class="form-control mx-auto" id="title" name="boardTitle" th:value="${board.boardTitle}">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-sm">
+                            <label for="contents" class="form-label">내용 : </label>
+                            <textarea type="text" class="form-control mx-auto" id="contents" name="contents" rows="10" th:text="${board.boardContent}"> </textarea>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-sm">
+                            <label for="file" class="form-label">첨부파일 : </label>
+                            <input type="file" class="form-control mx-auto" id="file" name="file" multiple>
+                        </div>
+                    </div>
+                    <div class="mt-4 row">
+                        <div class="col-sm d-flex justify-content-end">
+                            <button type="submit" id="btn-update" class="btn btn-primary me-2">수정</button>
+                            <button type="reset" id="btn-cancel" class="btn btn-secondary">취소</button>
+                        </div>
+                    </div>
+                    <input type="hidden" id="method" name="_method">
+                </form>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+</body>
+</html>
